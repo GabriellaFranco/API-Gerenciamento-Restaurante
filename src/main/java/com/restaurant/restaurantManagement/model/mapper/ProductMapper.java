@@ -16,6 +16,10 @@ public class ProductMapper {
                 .measurementUnit(productDTO.measurementUnit())
                 .price(productDTO.price())
                 .minQuantityOnStock(productDTO.minQuantityStock())
+                .inventory(Inventory.builder()
+                        .currentQuantity(productDTO.inventory().currentStock())
+                        .lastUpdatedAt(productDTO.inventory().lastUpdateAt())
+                        .build())
                 .build();
     }
 
