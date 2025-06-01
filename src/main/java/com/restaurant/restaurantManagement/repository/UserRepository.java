@@ -1,6 +1,6 @@
 package com.restaurant.restaurantManagement.repository;
 
-import com.restaurant.restaurantManagement.entity.User;
+import com.restaurant.restaurantManagement.model.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

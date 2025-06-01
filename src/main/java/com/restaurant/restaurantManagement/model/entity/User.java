@@ -1,4 +1,4 @@
-package com.restaurant.restaurantManagement.entity;
+package com.restaurant.restaurantManagement.model.entity;
 
 import com.restaurant.restaurantManagement.enums.UserProfile;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.restaurant.restaurantManagement.entity;
+package com.restaurant.restaurantManagement.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
