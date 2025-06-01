@@ -1,4 +1,4 @@
-package com.restaurant.restaurantManagement.entity;
+package com.restaurant.restaurantManagement.model.entity;
 
 import com.restaurant.restaurantManagement.enums.MeasurementUnit;
 import jakarta.persistence.*;
@@ -21,8 +21,6 @@ public class Inventory {
     private Long id;
     private Long currentQuantity;
 
-    @Enumerated(EnumType.STRING)
-    private MeasurementUnit measurementUnit;
     private LocalDateTime lastUpdatedAt;
 
     @OneToOne

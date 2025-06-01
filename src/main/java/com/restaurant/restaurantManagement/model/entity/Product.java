@@ -1,4 +1,4 @@
-package com.restaurant.restaurantManagement.entity;
+package com.restaurant.restaurantManagement.model.entity;
 
 import com.restaurant.restaurantManagement.enums.MeasurementUnit;
 import com.restaurant.restaurantManagement.enums.ProductCategory;
@@ -29,7 +29,6 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private MeasurementUnit measurementUnit;
     private BigDecimal price;
-    private int currentStock;
     private int minQuantityOnStock;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
