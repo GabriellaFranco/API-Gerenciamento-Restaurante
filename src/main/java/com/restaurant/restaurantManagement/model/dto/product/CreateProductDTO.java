@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Builder
 public record CreateProductDTO(
@@ -28,6 +29,14 @@ public record CreateProductDTO(
 
         @NotNull
         @Positive
-        int minQuantityStock
+        int minQuantityStock,
+
+        @NotNull
+        InventoryDTO inventory
 ) {
+        @Builder
+        public record InventoryDTO(
+                Long currentStock,
+                LocalDateTime lastUpdateAt
+        ) {}
 }
