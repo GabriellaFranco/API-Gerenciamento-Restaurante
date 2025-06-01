@@ -6,7 +6,7 @@ public enum UserProfile {
     OWNER,
     EMPLOYEE;
 
-    private UserProfile parseUserProfile(String profile) {
+    public UserProfile parseUserProfile(String profile) {
         try {
             return UserProfile.valueOf(profile.toUpperCase());
         } catch (IllegalArgumentException exc) {

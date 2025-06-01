@@ -32,7 +32,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/users", "/users/**").hasRole("ADMIN")
+                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/users", "/users/**").hasRole("OWNER")
                                 .requestMatchers("/login", "/system-error-reason").permitAll()
                         )
                 .addFilterBefore(requestLoggingFilter, UsernamePasswordAuthenticationFilter.class)
