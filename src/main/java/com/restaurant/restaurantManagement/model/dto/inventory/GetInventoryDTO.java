@@ -1,6 +1,6 @@
 package com.restaurant.restaurantManagement.model.dto.inventory;
 
-import lombok.Builder;
+import lombok.*;
 
 import java.time.LocalDateTime;
 

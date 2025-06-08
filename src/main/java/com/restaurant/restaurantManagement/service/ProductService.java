@@ -28,6 +28,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final UserRepository userRepository;
+    private final InventoryService inventoryService;
     private final EmailService emailService;
     private final WhatsappService whatsappService;
 
@@ -56,8 +57,10 @@ public class ProductService {
         product.setCategory(productDTO.category());
         product.setMeasurementUnit(productDTO.measurementUnit());
         product.setPrice(productDTO.price());
-        product.setCurrentStock(productDTO.currentStock());
         product.setMinQuantityOnStock(productDTO.minQuantityOnStock());
+        if (!product.getCurrentStock().equals(productDTO.currentStock())) {
+            inventoryService.updateStock(product, productDTO.currentStock());
+        }
 
         var updatedProduct = productRepository.save(product);
         return productMapper.toGetProductDTO(updatedProduct);
@@ -71,23 +74,6 @@ public class ProductService {
         }
         productRepository.delete(deletedProduct);
     }
-
-    public void notifyOwnersIfStockIsLow(Product product) {
-        if (product.getCurrentStock() <= product.getMinQuantityOnStock()) {
-            List<User> owners = userRepository.findByProfile(UserProfile.OWNER);
-
-            for (User owner : owners) {
-                var subject = "Low Stock: " + product.getName();
-                var message = "The stock of the product " + product.getName() + " is below the minimum amount.\n" +
-                        "Current stock: " + product.getCurrentStock() + "\n" +
-                        "Minimum stock: " + product.getMinQuantityOnStock();
-
-                emailService.sendEmail(owner.getEmail(), subject, message);
-                whatsappService.sendWhatsAppMessage(owner.getPhone(), message);
-            }
-        }
-    }
-
 
     public void validateUniqueProductName(String name) {
         if(productRepository.findByName(name).isPresent()) {
