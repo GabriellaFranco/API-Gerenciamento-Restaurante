@@ -2,6 +2,7 @@ package com.restaurant.restaurantManagement.model.mapper;
 
 import com.restaurant.restaurantManagement.model.dto.product.CreateProductDTO;
 import com.restaurant.restaurantManagement.model.dto.product.GetProductDTO;
+import com.restaurant.restaurantManagement.model.dto.product.UpdateProductDTO;
 import com.restaurant.restaurantManagement.model.entity.Inventory;
 import com.restaurant.restaurantManagement.model.entity.Product;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,18 @@ public class ProductMapper {
                         .currentQuantity(product.getInventory().getCurrentQuantity())
                         .lastUpdatedAt(product.getInventory().getLastUpdatedAt())
                         .build())
+                .build();
+    }
+
+    public Product toUpdateFromDTO(UpdateProductDTO updateProductDTO, Product existingProduct) {
+        return Product.builder()
+                .id(existingProduct.getId())
+                .name(updateProductDTO.name() != null ? updateProductDTO.name() : existingProduct.getName())
+                .category(updateProductDTO.category() != null ? updateProductDTO.category() : existingProduct.getCategory())
+                .price(updateProductDTO.price() != null ? updateProductDTO.price() : existingProduct.getPrice())
+                .measurementUnit(updateProductDTO.measurementUnit() != null ? updateProductDTO.measurementUnit() : existingProduct.getMeasurementUnit())
+                .currentStock(updateProductDTO.currentStock() != null ? updateProductDTO.currentStock() : existingProduct.getCurrentStock())
+                .minQuantityOnStock(updateProductDTO.minQuantityOnStock() != null ? updateProductDTO.minQuantityOnStock() : existingProduct.getMinQuantityOnStock())
                 .build();
     }
 }

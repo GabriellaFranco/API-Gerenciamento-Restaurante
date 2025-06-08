@@ -20,7 +20,6 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long currentQuantity;
-
     private LocalDateTime lastUpdatedAt;
 
     @OneToOne

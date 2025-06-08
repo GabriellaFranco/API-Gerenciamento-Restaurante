@@ -29,8 +29,8 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private MeasurementUnit measurementUnit;
     private BigDecimal price;
-    private int currentStock;
-    private int minQuantityOnStock;
+    private Long currentStock;
+    private Long minQuantityOnStock;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     List<InventoryTransaction> inventoryTransactions;

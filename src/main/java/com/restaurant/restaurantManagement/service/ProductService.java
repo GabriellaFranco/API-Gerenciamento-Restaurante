@@ -1,0 +1,107 @@
+package com.restaurant.restaurantManagement.service;
+
+import com.restaurant.restaurantManagement.enums.MeasurementUnit;
+import com.restaurant.restaurantManagement.enums.ProductCategory;
+import com.restaurant.restaurantManagement.enums.UserProfile;
+import com.restaurant.restaurantManagement.exception.BusinessException;
+import com.restaurant.restaurantManagement.exception.OperationNotAllowedException;
+import com.restaurant.restaurantManagement.exception.ResourceNotFoundException;
+import com.restaurant.restaurantManagement.model.dto.product.CreateProductDTO;
+import com.restaurant.restaurantManagement.model.dto.product.GetProductDTO;
+import com.restaurant.restaurantManagement.model.dto.product.UpdateProductDTO;
+import com.restaurant.restaurantManagement.model.entity.Product;
+import com.restaurant.restaurantManagement.model.entity.User;
+import com.restaurant.restaurantManagement.model.mapper.ProductMapper;
+import com.restaurant.restaurantManagement.repository.ProductRepository;
+import com.restaurant.restaurantManagement.repository.UserRepository;
+import com.restaurant.restaurantManagement.service.notification.EmailService;
+import com.restaurant.restaurantManagement.service.notification.WhatsappService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@RequiredArgsConstructor
+@Service
+public class ProductService {
+
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
+    private final UserRepository userRepository;
+    private final EmailService emailService;
+    private final WhatsappService whatsappService;
+
+    public List<GetProductDTO> getAllProducts() {
+        return productRepository.findAll().stream().map(productMapper::toGetProductDTO).toList();
+    }
+
+    public GetProductDTO getProductById(Long id) {
+        return productRepository.findById(id).map(productMapper::toGetProductDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
+    }
+
+    public GetProductDTO createProduct(CreateProductDTO productDTO) {
+        validateUniqueProductName(productDTO.name());
+        validateMeasurementUnitByCategory(productDTO.category(), productDTO.measurementUnit());
+        var productMapped = productMapper.toProduct(productDTO);
+        var productSaved = productRepository.save(productMapped);
+        return productMapper.toGetProductDTO(productSaved);
+    }
+
+    public GetProductDTO updateProduct(Long id, UpdateProductDTO productDTO) {
+        var product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
+
+        product.setName(productDTO.name());
+        product.setCategory(productDTO.category());
+        product.setMeasurementUnit(productDTO.measurementUnit());
+        product.setPrice(productDTO.price());
+        product.setCurrentStock(productDTO.currentStock());
+        product.setMinQuantityOnStock(productDTO.minQuantityOnStock());
+
+        var updatedProduct = productRepository.save(product);
+        return productMapper.toGetProductDTO(updatedProduct);
+    }
+
+    public void deleteProduct(Long id, User deletingUser) {
+        var deletedProduct = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
+        if (deletingUser.getProfile() == UserProfile.EMPLOYEE) {
+            throw new OperationNotAllowedException("You don't have permission to delete products!");
+        }
+        productRepository.delete(deletedProduct);
+    }
+
+    public void notifyOwnersIfStockIsLow(Product product) {
+        if (product.getCurrentStock() <= product.getMinQuantityOnStock()) {
+            List<User> owners = userRepository.findByProfile(UserProfile.OWNER);
+
+            for (User owner : owners) {
+                var subject = "Low Stock: " + product.getName();
+                var message = "The stock of the product " + product.getName() + " is below the minimum amount.\n" +
+                        "Current stock: " + product.getCurrentStock() + "\n" +
+                        "Minimum stock: " + product.getMinQuantityOnStock();
+
+                emailService.sendEmail(owner.getEmail(), subject, message);
+                whatsappService.sendWhatsAppMessage(owner.getPhone(), message);
+            }
+        }
+    }
+
+
+    public void validateUniqueProductName(String name) {
+        if(productRepository.findByName(name).isPresent()) {
+            throw new BusinessException("A product with this name already exists: " + name);
+        }
+    }
+
+    public void validateMeasurementUnitByCategory(ProductCategory category, MeasurementUnit unit) {
+        if (category == ProductCategory.BEVERAGES && unit != MeasurementUnit.LITER) {
+            throw new BusinessException("Beverages must be measured in liters!");
+        }
+
+        if (category != ProductCategory.BEVERAGES && unit == MeasurementUnit.LITER) {
+            throw new BusinessException("Ingredients must be measured in kilograms, units, boxes, dozens, or milliliters!");
+        }
+    }
+}

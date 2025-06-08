@@ -29,7 +29,7 @@ public record CreateProductDTO(
 
         @NotNull
         @Positive
-        int minQuantityStock,
+        Long minQuantityStock,
 
         @NotNull
         InventoryDTO inventory
