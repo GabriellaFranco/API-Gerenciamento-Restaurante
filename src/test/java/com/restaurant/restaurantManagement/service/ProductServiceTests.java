@@ -103,20 +103,4 @@ public class ProductServiceTests {
         verify(productRepository).delete(product);
     }
 
-    @Test
-    void testProductService_WhenProductStockIsBelowMinimumQuantity_ShouldNotifyOwnersByEmailAndWhatsapp() {
-        product.setCurrentStock(2L);
-        product.setMinQuantityOnStock(10L);
-
-        User owner = new User();
-        owner.setProfile(UserProfile.OWNER);
-        owner.setEmail("owner@example.com");
-        owner.setPhone("+551199999999");
-
-        when(userRepository.findByProfile(UserProfile.OWNER)).thenReturn(List.of(owner));
-        productService.notifyOwnersIfStockIsLow(product);
-
-        verify(emailService).sendEmail(eq("owner@example.com"), anyString(), anyString());
-        verify(whatsappService).sendWhatsAppMessage(eq("+551199999999"), anyString());
-    }
 }

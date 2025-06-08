@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public record GetInventoryTransactionDTO(
         Long id,
         TransactionType transactionType,
-        int quantity,
+        Long quantity,
         BigDecimal unitPrice,
         TransactionMotivation motivation,
         String details,
