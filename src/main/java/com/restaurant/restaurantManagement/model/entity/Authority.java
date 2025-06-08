@@ -1,12 +1,14 @@
 package com.restaurant.restaurantManagement.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
 @Entity
+@Builder
 @Table(name = "authorities")
 public class Authority {
 

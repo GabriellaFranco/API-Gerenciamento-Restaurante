@@ -5,22 +5,13 @@ import com.restaurant.restaurantManagement.enums.ProductCategory;
 import lombok.Builder;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Builder
-public record GetProductDTO(
-        Long id,
+public record UpdateProductDTO(
         String name,
         ProductCategory category,
         MeasurementUnit measurementUnit,
         BigDecimal price,
-        Long minQuantityStock,
-        InventoryDTO inventory
-) {
-
-    @Builder
-    public record InventoryDTO(
-            Long currentQuantity,
-            LocalDateTime lastUpdatedAt
-    ) {}
-}
+        Long currentStock,
+        Long minQuantityOnStock
+) {}
