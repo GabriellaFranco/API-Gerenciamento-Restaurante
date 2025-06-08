@@ -17,7 +17,7 @@ public record CreateInventoryTransactionDTO(
 
         @NotNull
         @Positive
-        int quantity,
+        Long quantity,
 
         @NotNull
         @Positive

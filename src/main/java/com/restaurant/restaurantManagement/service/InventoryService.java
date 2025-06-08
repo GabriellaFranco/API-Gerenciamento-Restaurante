@@ -1,5 +1,6 @@
 package com.restaurant.restaurantManagement.service;
 
+import com.restaurant.restaurantManagement.enums.TransactionType;
 import com.restaurant.restaurantManagement.enums.UserProfile;
 import com.restaurant.restaurantManagement.exception.BusinessException;
 import com.restaurant.restaurantManagement.exception.ResourceNotFoundException;
@@ -67,6 +68,16 @@ public class InventoryService {
                 whatsappService.sendWhatsAppMessage(owner.getPhone(), message);
             }
         }
+    }
 
+    public void processTransaction(Product product, TransactionType type, Long quantity) {
+        if (quantity <= 0) {
+            throw new BusinessException("A quantidade deve ser positiva.");
+        }
+        switch (type) {
+            case INBOUND -> increaseStock(product, quantity);
+            case OUTBOUND -> decreaseStock(product, quantity);
+            default -> throw new BusinessException("Tipo de transação inválido: " + type);
+        }
     }
 }

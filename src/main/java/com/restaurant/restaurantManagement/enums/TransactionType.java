@@ -4,8 +4,7 @@ import com.restaurant.restaurantManagement.exception.ResourceNotFoundException;
 
 public enum TransactionType {
     INBOUND,
-    OUTBOUND,
-    ADJUSTMENT;
+    OUTBOUND;
 
     public TransactionType parseTransactionType(String transactionType) {
         try {

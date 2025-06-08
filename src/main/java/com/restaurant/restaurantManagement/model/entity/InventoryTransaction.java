@@ -25,7 +25,7 @@ public class InventoryTransaction {
 
     @Enumerated(EnumType.STRING)
     private TransactionType type;
-    private int quantity;
+    private Long quantity;
 
     @Enumerated(EnumType.STRING)
     private MeasurementUnit measurementUnit;
