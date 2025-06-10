@@ -29,7 +29,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserProfile profile;
 
-    @OneToMany(mappedBy = "userResponsible", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "responsible", fetch = FetchType.LAZY)
     private List<InventoryTransaction> inventoryTransactions;
 
     @ManyToMany(fetch = FetchType.EAGER)

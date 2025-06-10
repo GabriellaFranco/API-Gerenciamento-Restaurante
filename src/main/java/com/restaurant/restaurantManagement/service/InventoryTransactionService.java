@@ -59,7 +59,7 @@ public class InventoryTransactionService {
     private InventoryTransaction buildTransaction(Product product, User responsible, GetInventoryTransactionDTO dto) {
         return InventoryTransaction.builder()
                 .product(product)
-                .userResponsible(responsible)
+                .responsible(responsible)
                 .type(dto.transactionType())
                 .quantity(dto.quantity())
                 .measurementUnit(dto.product().measurementUnit())

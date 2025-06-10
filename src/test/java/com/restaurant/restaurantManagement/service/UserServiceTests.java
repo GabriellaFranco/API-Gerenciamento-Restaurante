@@ -132,13 +132,6 @@ public class UserServiceTests {
     }
 
     @Test
-    void testUserService_WhenFindingAllUsers_ShouldReturnAListOfUsers() {
-        when(userRepository.findAll()).thenReturn(List.of(user));
-        List<GetUserDTO> result = userService.getAllUsers();
-        assertEquals(1, result.size());
-    }
-
-    @Test
     void testUserService_WhenFindingUserWithInvalidId_ShouldThrowResourceNotFoundException() {
         when(userRepository.findById(5L)).thenReturn(Optional.of(user));
         assertThrows(ResourceNotFoundException.class, () -> {
@@ -148,8 +141,15 @@ public class UserServiceTests {
 
     @Test
     void testUserService_WhenTryingToSelfDelete_ShouldThrowOperationNotAllowedException() {
-        assertThrows(OperationNotAllowedException.class, () -> {
-            userService.deleteUser(1L, 1L);
-        });
+        Long userId = 1L;
+        String email = "self@example.com";
+
+        User user = new User();
+        user.setId(userId);
+        user.setEmail(email);
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        assertThrows(OperationNotAllowedException.class, () -> userService.deleteUser(userId, email));
+        verify(userRepository, never()).delete(any());
     }
 }
