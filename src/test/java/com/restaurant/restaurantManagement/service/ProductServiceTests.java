@@ -91,7 +91,7 @@ public class ProductServiceTests {
         User employee = new User();
         employee.setProfile(UserProfile.EMPLOYEE);
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-        assertThrows(OperationNotAllowedException.class, () -> productService.deleteProduct(1L, employee));
+        assertThrows(OperationNotAllowedException.class, () -> productService.deleteProduct(1L, employee.getEmail()));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class ProductServiceTests {
         User owner = new User();
         owner.setProfile(UserProfile.OWNER);
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-        productService.deleteProduct(1L, owner);
+        productService.deleteProduct(1L, owner.getEmail());
         verify(productRepository).delete(product);
     }
 

@@ -34,9 +34,9 @@ public class InventoryTransactionMapper {
                         .measurementUnit(inventoryTransaction.getProduct().getMeasurementUnit())
                         .build())
                 .responsible(GetInventoryTransactionDTO.UserDTO.builder()
-                        .id(inventoryTransaction.getUserResponsible().getId())
-                        .name(inventoryTransaction.getUserResponsible().getName())
-                        .profile(inventoryTransaction.getUserResponsible().getProfile())
+                        .id(inventoryTransaction.getResponsible().getId())
+                        .name(inventoryTransaction.getResponsible().getName())
+                        .profile(inventoryTransaction.getResponsible().getProfile())
                         .build())
                 .build();
     }

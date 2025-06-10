@@ -6,6 +6,7 @@ import com.restaurant.restaurantManagement.filters.RequestLoggingFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -33,6 +34,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/users", "/users/**").hasRole("OWNER")
+                                .requestMatchers(HttpMethod.POST, "/users", "/products").hasRole("OWNER")
+                                .requestMatchers(HttpMethod.GET, "/products", "/products/**").hasAnyRole("EMPLOYEE", "OWNER")
+                                .requestMatchers(HttpMethod.PUT, "/products", "/products/**").hasAnyRole("EMPLOYEE", "OWNER")
+                                .requestMatchers(HttpMethod.DELETE, "/users", "/products").hasRole("OWNER")
                                 .requestMatchers("/login", "/system-error-reason").permitAll()
                         )
                 .addFilterBefore(requestLoggingFilter, UsernamePasswordAuthenticationFilter.class)

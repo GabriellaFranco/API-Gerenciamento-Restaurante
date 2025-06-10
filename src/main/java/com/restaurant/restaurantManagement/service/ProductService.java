@@ -66,13 +66,20 @@ public class ProductService {
         return productMapper.toGetProductDTO(updatedProduct);
     }
 
-    public void deleteProduct(Long id, User deletingUser) {
+    public void deleteProduct(Long id, String userEmail) {
         var deletedProduct = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
+        var deletingUser = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userEmail));
+
         if (deletingUser.getProfile() == UserProfile.EMPLOYEE) {
             throw new OperationNotAllowedException("You don't have permission to delete products!");
         }
         productRepository.delete(deletedProduct);
+    }
+
+    public List<GetProductDTO> searchProductsByFilter(String name, ProductCategory category, MeasurementUnit measurementUnit) {
+        return productRepository.findByFilters(name, category, measurementUnit).stream().map(productMapper::toGetProductDTO).toList();
     }
 
     public void validateUniqueProductName(String name) {

@@ -61,14 +61,21 @@ public class UserService {
         return userMapper.toGetUserDTO(updatedUser);
     }
 
-    public void deleteUser(Long idToDelete, Long loggedUserId) {
-        if (idToDelete.equals(loggedUserId)) {
+    public void deleteUser(Long idToDelete, String userEmail) {
+        var loggedUser = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userEmail));
+        if (idToDelete.equals(loggedUser.getId())) {
             throw new OperationNotAllowedException("You cannot exclude your own account!");
         }
+
         var userToDelete = userRepository.findById(idToDelete)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + idToDelete));
 
         userRepository.delete(userToDelete);
+    }
+
+    public List<GetUserDTO> searchUsersByFilters(String name, String email, String phone, String cpf, UserProfile profile) {
+        return userRepository.findByFilters(email, cpf, name, phone, profile).stream().map(userMapper::toGetUserDTO).toList();
     }
 
     private void AssignUserAuthority(User user) {

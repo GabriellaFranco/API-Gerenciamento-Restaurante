@@ -42,5 +42,5 @@ public class InventoryTransaction {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userResponsible;
+    private User responsible;
 }
