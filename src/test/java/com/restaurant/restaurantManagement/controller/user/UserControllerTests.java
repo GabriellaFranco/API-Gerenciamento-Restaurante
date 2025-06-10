@@ -67,7 +67,7 @@ public class UserControllerTests {
     @Test
     @WithMockUser(username = "admin", roles = {"OWNER"})
     void testUserController_WhenGetAllUsers_ShouldReturnAListOfUsers() throws Exception {
-        when(userService.getAllUsers()).thenReturn(List.of(getUserDTO));
+        when(userService.getAllUsers()).thenReturn(List.of(getUserDTO, user1));
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("Gabriella"))
@@ -75,7 +75,7 @@ public class UserControllerTests {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(username = "admin", roles = {"OWNER"})
     void testUserController_WhenGetAllUsersWithNoExistingUsers_ShouldReturnStatusNoContent() throws Exception {
         when(userService.getAllUsers()).thenReturn(List.of());
         mockMvc.perform(get("/users"))
@@ -83,7 +83,7 @@ public class UserControllerTests {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(username = "admin", roles = {"OWNER"})
     void testUserController_WhenGetUserById_ShouldReturnUserObject() throws Exception {
         when(userService.getUserById(1L)).thenReturn(getUserDTO);
         mockMvc.perform(get("/users/1"))
@@ -93,7 +93,7 @@ public class UserControllerTests {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(username = "admin", roles = {"OWNER"})
     void testUserController_WhenGetUserByIdWithNonExistingId_ShouldReturnStatusNotFound() throws Exception {
         when(userService.getUserById(5L)).thenThrow(new ResourceNotFoundException("User not found"));
         mockMvc.perform(get("/users/5"))

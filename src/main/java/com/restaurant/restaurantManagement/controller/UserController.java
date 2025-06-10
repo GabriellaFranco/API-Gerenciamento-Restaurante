@@ -106,7 +106,7 @@ public class UserController {
                                                             @RequestParam(required = false) String phone,
                                                             @RequestParam(required = false) UserProfile profile) {
 
-        List<GetUserDTO> users = userService.searchUsersByFilters(name, email, cpf, phone, profile);
+        var users = userService.searchUsersByFilters(name, email, cpf, phone, profile);
         return users.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(users);
     }
 }
