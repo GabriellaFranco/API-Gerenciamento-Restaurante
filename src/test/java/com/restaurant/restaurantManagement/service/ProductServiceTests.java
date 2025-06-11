@@ -21,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -74,7 +73,7 @@ public class ProductServiceTests {
 
     @Test
     void testProductService_WhenCreatingAProductWithExistingName_ShouldThrowBusinessException() {
-        when(productRepository.findByName("Coca-Cola")).thenReturn(Optional.of(product));
+        when(productRepository.findByNameIgnoreCase("Coca-Cola")).thenReturn(Optional.of(product));
         var exc = assertThrows(BusinessException.class, () -> productService.validateUniqueProductName("Coca-Cola"));
         assertTrue(exc.getMessage().contains("already exists"));
     }
