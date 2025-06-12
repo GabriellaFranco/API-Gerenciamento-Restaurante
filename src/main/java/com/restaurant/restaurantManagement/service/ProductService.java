@@ -17,6 +17,7 @@ import com.restaurant.restaurantManagement.service.notification.EmailService;
 import com.restaurant.restaurantManagement.service.notification.WhatsappService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
     }
 
+    @Transactional
     public GetProductDTO createProduct(CreateProductDTO productDTO) {
         validateUniqueProductName(productDTO.name());
         validateMeasurementUnitByCategory(productDTO.category(), productDTO.measurementUnit());
@@ -48,6 +50,7 @@ public class ProductService {
         return productMapper.toGetProductDTO(productSaved);
     }
 
+    @Transactional
     public GetProductDTO updateProduct(Long id, UpdateProductDTO productDTO) {
         var product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
@@ -65,6 +68,7 @@ public class ProductService {
         return productMapper.toGetProductDTO(updatedProduct);
     }
 
+    @Transactional
     public void deleteProduct(Long id, String userEmail) {
         var deletedProduct = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));

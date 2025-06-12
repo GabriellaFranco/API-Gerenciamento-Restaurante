@@ -7,6 +7,7 @@ import com.restaurant.restaurantManagement.enums.MeasurementUnit;
 import com.restaurant.restaurantManagement.enums.TransactionMotivation;
 import com.restaurant.restaurantManagement.enums.TransactionType;
 import com.restaurant.restaurantManagement.model.dto.inventoryTransaction.GetInventoryTransactionDTO;
+import com.restaurant.restaurantManagement.repository.ProductRepository;
 import com.restaurant.restaurantManagement.service.InventoryTransactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -40,6 +42,9 @@ public class InventoryTransactionControllerTests {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private ProductRepository productRepository;
 
     @MockBean
     private InventoryTransactionService inventoryTransactionService;

@@ -22,7 +22,7 @@ public class Inventory {
     private Long currentQuantity;
     private LocalDateTime lastUpdatedAt;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "product_id")
     private Product product;
 }

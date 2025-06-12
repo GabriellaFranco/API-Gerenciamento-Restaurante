@@ -14,6 +14,7 @@ import com.restaurant.restaurantManagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + id));
     }
 
+    @Transactional
     public GetUserDTO createUser(CreateUserDTO userDTO) {
         validateUserEmail(userDTO.email());
         var userMapped = userMapper.toUser(userDTO);
@@ -46,6 +48,7 @@ public class UserService {
         return userMapper.toGetUserDTO(userSaved);
     }
 
+    @Transactional
     public GetUserDTO updateUser(Long id, UpdateUserDTO updateUserDTO) {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + id));
@@ -61,6 +64,7 @@ public class UserService {
         return userMapper.toGetUserDTO(updatedUser);
     }
 
+    @Transactional
     public void deleteUser(Long idToDelete, String userEmail) {
         var loggedUser = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userEmail));

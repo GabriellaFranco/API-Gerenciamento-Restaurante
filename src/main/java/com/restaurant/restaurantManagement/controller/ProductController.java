@@ -93,6 +93,13 @@ public class ProductController {
         return ResponseEntity.ok("Product deleted: " + id);
     }
 
+    @Operation(
+            summary = "Finds a list of products matching the informed params",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Operation successful"),
+                    @ApiResponse(responseCode = "204", description = "No content to show")
+            }
+    )
     @GetMapping("/search")
     public ResponseEntity<List<GetProductDTO>> getProductsByFilter(@RequestParam(required = false) String name,
                                                                    @RequestParam(required = false) ProductCategory category,

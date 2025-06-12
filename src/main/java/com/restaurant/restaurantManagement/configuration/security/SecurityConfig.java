@@ -32,15 +32,16 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/users", "/users/**").hasRole("OWNER")
-                                .requestMatchers(HttpMethod.POST, "/users", "/products", "/inventories",
-                                        "/inventories/**", "/inventory-transactions", "/inventory-transactions/**").hasRole("OWNER")
-                                .requestMatchers(HttpMethod.GET, "/products", "/products/**", "/inventories",
-                                        "/inventories/**", "/inventory-transactions", "/inventory-transactions/**").hasAnyRole("EMPLOYEE", "OWNER")
-                                .requestMatchers(HttpMethod.PUT, "/products", "/products/**").hasAnyRole("EMPLOYEE", "OWNER")
-                                .requestMatchers(HttpMethod.DELETE, "/users", "/products").hasRole("OWNER")
-                                .requestMatchers("/login", "/system-error-reason").permitAll()
-                        )
+                        .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**", "/users", "/users/**").hasRole("OWNER")
+                        .requestMatchers(HttpMethod.POST, "/users", "/users/**").hasRole("OWNER")
+                        .requestMatchers(HttpMethod.PUT, "/users", "/users/**").hasAnyRole("OWNER")
+                        .requestMatchers(HttpMethod.POST, "/products", "/products/**", "/inventories",
+                                "/inventories/**", "/inventory-transactions", "/inventory-transactions/**").hasAnyRole("OWNER", "EMPLOYEE")
+                        .requestMatchers(HttpMethod.GET, "/products", "/products/**", "/inventories",
+                                "/inventories/**", "/inventory-transactions", "/inventory-transactions/**").hasAnyRole("EMPLOYEE", "OWNER")
+                        .requestMatchers(HttpMethod.PUT, "/products", "/products/**").hasAnyRole("EMPLOYEE", "OWNER")
+                        .requestMatchers("/login", "/system-error-reason").permitAll()
+                )
                 .addFilterBefore(requestLoggingFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(performanceLoggingFilter, UsernamePasswordAuthenticationFilter.class);
 

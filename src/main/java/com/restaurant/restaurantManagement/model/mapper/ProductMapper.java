@@ -16,6 +16,7 @@ public class ProductMapper {
                 .category(productDTO.category())
                 .measurementUnit(productDTO.measurementUnit())
                 .price(productDTO.price())
+                .currentStock(productDTO.inventory().currentStock())
                 .minQuantityOnStock(productDTO.minQuantityStock())
                 .inventory(Inventory.builder()
                         .currentQuantity(productDTO.inventory().currentStock())

@@ -10,7 +10,6 @@ import com.restaurant.restaurantManagement.model.entity.Inventory;
 import com.restaurant.restaurantManagement.model.entity.Product;
 import com.restaurant.restaurantManagement.model.entity.User;
 import com.restaurant.restaurantManagement.model.mapper.InventoryMapper;
-import com.restaurant.restaurantManagement.model.mapper.ProductMapper;
 import com.restaurant.restaurantManagement.repository.InventoryRepository;
 import com.restaurant.restaurantManagement.repository.ProductRepository;
 import com.restaurant.restaurantManagement.repository.UserRepository;
@@ -18,6 +17,7 @@ import com.restaurant.restaurantManagement.service.notification.EmailService;
 import com.restaurant.restaurantManagement.service.notification.WhatsappService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,7 +28,6 @@ public class InventoryService {
     private final InventoryRepository inventoryRepository;
     private final UserRepository userRepository;
     private final InventoryMapper inventoryMapper;
-    private final ProductMapper productMapper;
     private final ProductRepository productRepository;
     private final EmailService emailService;
     public final WhatsappService whatsappService;
@@ -46,6 +45,7 @@ public class InventoryService {
         return inventoryRepository.findWithLowStock().stream().map(inventoryMapper::toGetInventoryDTO).toList();
     }
 
+    @Transactional
     public GetInventoryDTO increaseStock(Product product, Long amount) {
         Long updatedStock = product.getCurrentStock() + amount;
         updateStock(product, updatedStock);
@@ -54,6 +54,7 @@ public class InventoryService {
         return inventoryMapper.toGetInventoryDTO(updatedInventory);
     }
 
+    @Transactional
     public GetInventoryDTO decreaseStock(Product product, Long quantity) {
         Long updatedStock = product.getCurrentStock() - quantity;
         if (updatedStock < 0) {
@@ -65,6 +66,7 @@ public class InventoryService {
         return inventoryMapper.toGetInventoryDTO(updatedInventory);
     }
 
+    @Transactional
     public void updateStock(Product product, Long newStock) {
         product.setCurrentStock(newStock);
 
