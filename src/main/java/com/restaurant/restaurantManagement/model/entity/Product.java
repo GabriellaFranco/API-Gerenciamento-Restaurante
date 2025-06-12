@@ -32,10 +32,10 @@ public class Product {
     private Long currentStock;
     private Long minQuantityOnStock;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<InventoryTransaction> inventoryTransactions;
 
-    @OneToOne(mappedBy = "product")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private Inventory inventory;
 
 }

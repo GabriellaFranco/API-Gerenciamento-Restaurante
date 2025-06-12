@@ -29,10 +29,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserProfile profile;
 
-    @OneToMany(mappedBy = "responsible", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "responsible", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     private List<InventoryTransaction> inventoryTransactions;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_authority",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
