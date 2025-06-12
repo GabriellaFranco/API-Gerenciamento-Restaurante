@@ -76,8 +76,8 @@ public class InventoryServiceTests {
 
     @Test
     void testInventoryService_WhenGetInventoryByNonExistingProductName_ShouldThrowResourceNotFoundException() {
-        when(inventoryRepository.findByProduct(product)).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> inventoryService.getInventoryByProduct(product));
+        when(inventoryRepository.findByProductName(product.getName())).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> inventoryService.getInventoryByProductName(product.getName()));
     }
 
     @Test

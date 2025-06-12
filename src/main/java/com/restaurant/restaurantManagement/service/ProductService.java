@@ -10,7 +10,6 @@ import com.restaurant.restaurantManagement.model.dto.product.CreateProductDTO;
 import com.restaurant.restaurantManagement.model.dto.product.GetProductDTO;
 import com.restaurant.restaurantManagement.model.dto.product.UpdateProductDTO;
 import com.restaurant.restaurantManagement.model.entity.Product;
-import com.restaurant.restaurantManagement.model.entity.User;
 import com.restaurant.restaurantManagement.model.mapper.ProductMapper;
 import com.restaurant.restaurantManagement.repository.ProductRepository;
 import com.restaurant.restaurantManagement.repository.UserRepository;
@@ -78,12 +77,17 @@ public class ProductService {
         productRepository.delete(deletedProduct);
     }
 
+    public Product getProductByName(String productName) {
+        return productRepository.findByNameIgnoreCase(productName)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + productName));
+    }
+
     public List<GetProductDTO> searchProductsByFilter(String name, ProductCategory category, MeasurementUnit measurementUnit) {
         return productRepository.findByFilters(name, category, measurementUnit).stream().map(productMapper::toGetProductDTO).toList();
     }
 
     public void validateUniqueProductName(String name) {
-        if(productRepository.findByName(name).isPresent()) {
+        if(productRepository.findByNameIgnoreCase(name).isPresent()) {
             throw new BusinessException("A product with this name already exists: " + name);
         }
     }

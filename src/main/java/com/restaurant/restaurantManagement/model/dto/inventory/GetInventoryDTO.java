@@ -1,5 +1,6 @@
 package com.restaurant.restaurantManagement.model.dto.inventory;
 
+import com.restaurant.restaurantManagement.enums.ProductCategory;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,8 @@ public record GetInventoryDTO(
     @Builder
     public record ProductDTO(
             Long id,
-            String name
+            String name,
+            ProductCategory category,
+            Long minQuantityStock
     ) {}
 }

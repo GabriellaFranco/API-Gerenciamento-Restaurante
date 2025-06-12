@@ -12,8 +12,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -59,7 +57,8 @@ public class ProductController {
                     @ApiResponse(responseCode = "201", description = "Operation successful"),
                     @ApiResponse(responseCode = "400", description = "Invalid data")
             }
-    )    @PostMapping
+    )
+    @PostMapping
     public ResponseEntity<GetProductDTO> createProduct(@Valid @RequestBody CreateProductDTO productDTO) {
         var product = productService.createProduct(productDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(product.id()).toUri();
