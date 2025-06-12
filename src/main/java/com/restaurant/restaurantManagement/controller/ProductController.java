@@ -57,7 +57,8 @@ public class ProductController {
                     @ApiResponse(responseCode = "201", description = "Operation successful"),
                     @ApiResponse(responseCode = "400", description = "Invalid data")
             }
-    )    @PostMapping
+    )
+    @PostMapping
     public ResponseEntity<GetProductDTO> createProduct(@Valid @RequestBody CreateProductDTO productDTO) {
         var product = productService.createProduct(productDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(product.id()).toUri();
